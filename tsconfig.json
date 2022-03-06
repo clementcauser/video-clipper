@@ -16,8 +16,12 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@firebase/*": ["firebase/*"],
-      "@constants/*": ["constants/*"]
+      "@styles/*": ["styles/*"],
+      "@firebase": ["firebase/client"],
+      "@constants": ["constants/index"],
+      "@utils": ["utils/index"],
+      "@validation/*": ["validation/*"],
+      "@components/*": ["components/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
