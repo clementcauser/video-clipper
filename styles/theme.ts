@@ -15,6 +15,12 @@ let theme = createTheme({
       dark: "#ba000d",
       contrastText: "#000",
     },
+    background: {
+      default: "#f5f8fa",
+    },
+  },
+  shape: {
+    borderRadius: 8,
   },
 });
 
