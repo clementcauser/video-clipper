@@ -1,34 +1,34 @@
-import { Route } from "@constants";
-import { firebaseAuth } from "@firebase";
+import { Button } from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { User } from "firebase/auth";
+import { getUserFromCookie, withPrivateServerSideProps } from "@utils/auth";
+import { useAuth } from "context";
 import { GetServerSideProps } from "next";
 
 type Props = {
-  user: User;
+  userName?: string;
 };
 
-const Homepage = ({ user }: Props) => {
+const Homepage = ({ userName }: Props) => {
+  const { signOut } = useAuth();
+
   return (
     <Container maxWidth="sm">
-      <Typography>Bienvenue {user.displayName} !</Typography>
+      <Typography>Bienvenue {userName} !</Typography>
+      <Button onClick={() => signOut()}>Déconnexion</Button>
     </Container>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const user = firebaseAuth.currentUser;
+export const getServerSideProps: GetServerSideProps<Props> =
+  withPrivateServerSideProps(async (ctx) => {
+    const user = await getUserFromCookie(ctx);
 
-  if (!user) {
-    return { redirect: { destination: Route.LOGIN, permanent: false } };
-  }
-
-  return {
-    props: {
-      user,
-    },
-  };
-};
+    try {
+      return { props: { userName: user.email } };
+    } catch (error) {
+      return { props: {} };
+    }
+  });
 
 export default Homepage;

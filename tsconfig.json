@@ -17,11 +17,12 @@
     "baseUrl": ".",
     "paths": {
       "@styles/*": ["styles/*"],
-      "@firebase": ["firebase/client"],
+      "@firebase/*": ["firebase/*"],
       "@constants": ["constants/index"],
-      "@utils": ["utils/index"],
+      "@utils/*": ["utils/*"],
       "@validation/*": ["validation/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@contexts": ["contexts/index"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

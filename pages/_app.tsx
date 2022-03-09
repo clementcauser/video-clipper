@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import createEmotionCache from "@styles/createEmotionCache";
 import "@styles/globals.css";
 import theme from "@styles/theme";
+import { AuthProvider } from "context";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -24,10 +25,12 @@ const App = (props: MyAppProps) => {
         <title>{APP_NAME}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </AuthProvider>
     </CacheProvider>
   );
 };

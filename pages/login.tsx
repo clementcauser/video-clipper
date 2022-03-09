@@ -1,23 +1,18 @@
 import AuthCard from "@components/auth/AuthCard";
 import ProviderButton from "@components/auth/ProviderButton";
 import { LoginForm } from "@components/forms";
-import { firebaseAuth } from "@firebase";
-import Typography from "@mui/material/Typography";
-import MUIContainer from "@mui/material/Container";
-import { styled } from "@mui/material/styles";
-import { generateClassName } from "@utils";
-import {
-  useSignInWithGithub,
-  useSignInWithGoogle,
-  useSignInWithEmailAndPassword,
-} from "react-firebase-hooks/auth";
-import { APP_NAME, Route } from "@constants";
-import { GetServerSideProps } from "next";
-import MUILink from "@mui/material/Link";
-import Link from "next/link";
-import Snackbar from "@mui/material/Snackbar";
+import { APP_NAME, defaultSnackbarDuration, Route } from "@constants";
 import Alert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
+import MUIContainer from "@mui/material/Container";
+import MUILink from "@mui/material/Link";
+import Snackbar from "@mui/material/Snackbar";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import isAuthenticated from "@utils/auth/isAuthenticated";
+import generateClassName from "@utils/generateClassName";
+import { useAuth } from "context";
+import { GetServerSideProps } from "next";
+import Link from "next/link";
 
 const providerBoxClassName = generateClassName("provider-box", "login-page");
 
@@ -44,28 +39,7 @@ const Container = styled(MUIContainer)(({ theme }) => ({
 }));
 
 const LoginPage = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const [signInWithGithub, githubUser, githubLoading, githubError] =
-    useSignInWithGithub(firebaseAuth);
-
-  const [signInWithGoogle, googleUser, googleLoading, googleError] =
-    useSignInWithGoogle(firebaseAuth);
-
-  const [createUserWithEmailAndPassword, emailUser, emailLoading, emailError] =
-    useSignInWithEmailAndPassword(firebaseAuth);
-
-  useEffect(() => {
-    if (githubError) {
-      setErrorMessage(githubError.message);
-    }
-    if (googleError) {
-      setErrorMessage(googleError.message);
-    }
-    if (emailError) {
-      setErrorMessage(emailError.message);
-    }
-  }, [emailError, googleError, githubError]);
+  const { withEmailAndPassword, withGithub, withGoogle, error } = useAuth();
 
   return (
     <Container maxWidth="sm">
@@ -77,10 +51,8 @@ const LoginPage = () => {
           </Typography>
         </Typography>
         <LoginForm
-          onSubmit={({ email, password }) =>
-            createUserWithEmailAndPassword(email, password)
-          }
-          loading={emailLoading}
+          onSubmit={withEmailAndPassword.signIn}
+          loading={withEmailAndPassword.loading}
         />
         <div className={providerBoxClassName}>
           <Typography>
@@ -89,14 +61,14 @@ const LoginPage = () => {
           <ProviderButton
             fullWidth
             provider="github"
-            onClick={() => signInWithGithub()}
-            loading={githubLoading}
+            onClick={() => withGithub.signIn()}
+            loading={withGithub.loading}
           />
           <ProviderButton
             fullWidth
             provider="google"
-            onClick={() => signInWithGoogle()}
-            loading={googleLoading}
+            onClick={() => withGoogle.signIn()}
+            loading={withGoogle.loading}
           />
         </div>
         <Typography>
@@ -107,26 +79,32 @@ const LoginPage = () => {
         </Typography>
       </AuthCard>
       <Snackbar
-        open={!!errorMessage}
-        autoHideDuration={3000}
-        onClose={() => setErrorMessage(null)}
+        open={!!error.message}
+        autoHideDuration={defaultSnackbarDuration}
+        onClose={() => error.reset()}
       >
-        <Alert onClose={() => setErrorMessage(null)} severity="error">
-          {errorMessage}
+        <Alert onClose={() => error.reset()} severity="error">
+          {error.message}
         </Alert>
       </Snackbar>
     </Container>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const user = firebaseAuth.currentUser;
+export default LoginPage;
 
-  if (user) {
-    return { redirect: { destination: Route.HOME, permanent: false } };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const isUserAuthenticated = await isAuthenticated(ctx);
+
+  // if user is already logged in then he gets redirected to the homepage
+  if (isUserAuthenticated) {
+    return {
+      redirect: {
+        destination: Route.HOME,
+        permanent: false,
+      },
+    };
   }
 
   return { props: {} };
 };
-
-export default LoginPage;

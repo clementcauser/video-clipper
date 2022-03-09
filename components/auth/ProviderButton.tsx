@@ -1,10 +1,10 @@
 import GithubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
-import { CircularProgress, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import MUIButton from "@mui/material/Button";
 import { ComponentProps, ReactNode } from "react";
 
-type SupportedProviders = "github" | "google";
+export type SupportedProvider = "github" | "google";
 type ProviderData = {
   label: string;
   icon: ReactNode;
@@ -13,7 +13,7 @@ type ProviderData = {
 };
 
 const PROVIDERS: {
-  [key in SupportedProviders]: ProviderData;
+  [key in SupportedProvider]: ProviderData;
 } = {
   github: {
     label: "Se connecter via Github",
@@ -43,7 +43,7 @@ const Button = styled(MUIButton)<Pick<Props, "provider">>(({ provider }) => {
 });
 
 type Props = {
-  provider: SupportedProviders;
+  provider: SupportedProvider;
   loading?: boolean;
 } & ComponentProps<typeof MUIButton>;
 

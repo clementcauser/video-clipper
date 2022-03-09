@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { generateClassName } from "@utils";
+import generateClassName from "@utils/generateClassName";
 import { ComponentPropsWithoutRef, FC } from "react";
 
 const titleClassName = generateClassName("title", "auth-card");

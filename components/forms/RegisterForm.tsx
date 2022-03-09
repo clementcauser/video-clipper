@@ -1,10 +1,10 @@
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import registerSchema, { RegisterFormData } from "@validation/register";
-import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { generateClassName } from "@utils";
 import { styled } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import generateClassName from "@utils/generateClassName";
+import registerSchema, { RegisterFormData } from "@validation/register";
+import { Controller, useForm } from "react-hook-form";
 
 const textFieldClassName = generateClassName("textfield", "register-form");
 const submitButtonClassName = generateClassName(

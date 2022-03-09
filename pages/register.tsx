@@ -1,48 +1,26 @@
 import AuthCard from "@components/auth/AuthCard";
 import { RegisterForm } from "@components/forms";
 import { Route } from "@constants";
-import { firebaseAuth } from "@firebase";
 import { styled } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import MUIContainer from "@mui/material/Container";
 import MUILink from "@mui/material/Link";
 import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
+import { useAuth } from "context";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 const Container = styled(MUIContainer)(({ theme }) => ({
   ".auth-card": {
     marginTop: theme.spacing(9),
     ".email-title": {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(2),
     },
   },
 }));
 
 const RegisterPage = () => {
-  const router = useRouter();
-  const [showError, setShowError] = useState(false);
-
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(firebaseAuth);
-
-  useEffect(() => {
-    // if the request has failed then we show up an error snackbar
-    if (error) {
-      setShowError(true);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    // if user is truthy then user creation has been successfuly done
-    // so we redirect the user to the homepage
-    if (user) {
-      router.push(Route.HOME);
-    }
-  }, [user, router]);
+  const { withEmailAndPassword, error } = useAuth();
 
   return (
     <Container maxWidth="sm">
@@ -55,17 +33,15 @@ const RegisterPage = () => {
           </Link>
         </Typography>
         <RegisterForm
-          onSubmit={({ email, password }) =>
-            createUserWithEmailAndPassword(email, password)
-          }
-          loading={loading}
+          onSubmit={withEmailAndPassword.signUp}
+          loading={withEmailAndPassword.loading}
         />
         <Snackbar
-          open={showError}
+          open={!!error.message}
           autoHideDuration={3000}
-          onClose={() => setShowError(false)}
+          onClose={() => error.reset()}
         >
-          <Alert onClose={() => setShowError(false)} severity="error">
+          <Alert onClose={() => error.reset()} severity="error">
             {error?.message}
           </Alert>
         </Snackbar>

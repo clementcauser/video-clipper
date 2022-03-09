@@ -1,7 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { generateClassName } from "@utils";
+import TextField from "@mui/material/TextField";
+import generateClassName from "@utils/generateClassName";
 import schema, { LoginFormData } from "@validation/login";
 import { Controller, useForm } from "react-hook-form";
 
