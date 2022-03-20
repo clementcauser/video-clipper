@@ -18,7 +18,7 @@ const withPrivateServerSideProps = (
     if (!_isAuthenticated) {
       return {
         redirect: {
-          destination: Route.HOME,
+          destination: Route.LOGIN,
           permanent: false,
         },
       };
