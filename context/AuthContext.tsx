@@ -29,11 +29,9 @@ const AuthProvider: FC = ({ children }) => {
         // get user token
         const token = await user.getIdToken();
         // set cookie value
-
         nookies.set(undefined, firebaseCookieName, token, {
           secure: process.env.NODE_ENV !== "development",
           maxAge: 30 * 24 * 60 * 60,
-          sameSite: "strict",
         });
 
         setCurrentUser(user);
