@@ -17,6 +17,10 @@ const registerValidationSchema = yup
   })
   .required();
 
-export type RegisterFormData = yup.InferType<typeof registerValidationSchema>;
+export type RegisterFormData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default registerValidationSchema;

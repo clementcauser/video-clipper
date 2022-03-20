@@ -5,3 +5,4 @@ export {
   defaultSnackbarDuration,
   firebaseCookieName,
 } from "./app";
+export { defaultClipDuration } from "./clip";

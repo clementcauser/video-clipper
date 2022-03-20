@@ -12,6 +12,9 @@ const loginValidationSchema = yup
   })
   .required();
 
-export type LoginFormData = yup.InferType<typeof loginValidationSchema>;
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 export default loginValidationSchema;

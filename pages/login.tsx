@@ -2,6 +2,7 @@ import AuthCard from "@components/auth/AuthCard";
 import ProviderButton from "@components/auth/ProviderButton";
 import { LoginForm } from "@components/forms";
 import { APP_NAME, defaultSnackbarDuration, Route } from "@constants";
+import useAuth from "@hooks/useAuth";
 import Alert from "@mui/material/Alert";
 import MUIContainer from "@mui/material/Container";
 import MUILink from "@mui/material/Link";
@@ -10,7 +11,6 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import isAuthenticated from "@utils/auth/isAuthenticated";
 import generateClassName from "@utils/generateClassName";
-import { useAuth } from "context";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 

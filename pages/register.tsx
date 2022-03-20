@@ -1,13 +1,13 @@
 import AuthCard from "@components/auth/AuthCard";
 import { RegisterForm } from "@components/forms";
 import { Route } from "@constants";
+import useAuth from "@hooks/useAuth";
 import { styled } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import MUIContainer from "@mui/material/Container";
 import MUILink from "@mui/material/Link";
 import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
-import { useAuth } from "context";
 import Link from "next/link";
 
 const Container = styled(MUIContainer)(({ theme }) => ({

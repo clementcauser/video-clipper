@@ -9,11 +9,15 @@ const isAuthenticated = async (
   const cookies = nookies.get(ctx);
 
   if (cookies[firebaseCookieName]) {
-    const user = await verifyTokenId(cookies[firebaseCookieName]);
+    try {
+      const user = await verifyTokenId(cookies[firebaseCookieName]);
 
-    // An anonymous user may have a UID, but authenticated users must have an
-    // account (an email address).
-    return !!user.email;
+      // An anonymous user may have a UID, but authenticated users must have an
+      // account (an email address).
+      return !!user.email;
+    } catch (err) {
+      return false;
+    }
   }
 
   return false;

@@ -22,7 +22,9 @@
       "@utils/*": ["utils/*"],
       "@validation/*": ["validation/*"],
       "@components/*": ["components/*"],
-      "@contexts": ["contexts/index"]
+      "@hooks/*": ["hooks/*"],
+      "@contexts": ["contexts/index"],
+      "@interfaces": ["interfaces/index"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
