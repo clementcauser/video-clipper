@@ -7,14 +7,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useCallback, useState } from "react";
-
-const clipCollectionRef = createTypedCollection<IClip>("clips");
+import { v4 as uuid } from "uuid";
 
 const getClipDocumentRef = (clipUid: string) =>
   createTypedDocument<IClip>("clips", clipUid);
 
 const createClipFunction = async (payload: IClip) => {
-  return setDoc<IClip>(clipCollectionRef, payload);
+  return setDoc<IClip>(getClipDocumentRef(uuid()), payload);
 };
 
 const updateClipFunction = async (payload: IClip) => {

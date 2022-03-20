@@ -24,6 +24,8 @@ const clipConverter: FirestoreDataConverter<IClip> = {
       startTime: data.startTime,
       url: data.url,
       title: data.title,
+      authorId: data.authorId,
+      lastUpdate: data.lastUpdate,
     };
   },
 };

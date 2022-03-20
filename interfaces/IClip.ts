@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { ITag } from "./ITag";
 
 export interface IClip {
@@ -8,4 +9,5 @@ export interface IClip {
   endTime: number;
   tags?: ITag[];
   authorId: string;
+  lastUpdate: Timestamp;
 }

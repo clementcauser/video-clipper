@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
+import { serverTimestamp, Timestamp } from "firebase/firestore";
 
 const ModalBox = styled(Box)(({ theme }) => ({
   maxWidth: 600,
@@ -60,11 +61,12 @@ const CreationModal = ({ open, onClose, onSubmit, defaultValues }: Props) => {
               startTime: 0,
               endTime: 183,
               url: `assets/video-surf.mp4#t=${start},${end}`,
+              lastUpdate: Timestamp.now(),
             });
           }}
-          onClipEdit={(clip) => {
-            return updateClip(clip);
-          }}
+          onClipEdit={(clip) =>
+            updateClip({ ...clip, lastUpdate: Timestamp.now() })
+          }
           onClipDelete={deleteClip}
           defaultValues={defaultValues}
           onCancel={onClose}

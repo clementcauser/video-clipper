@@ -14,7 +14,7 @@ import TagsPicker from "./TagsPicker";
 
 type Props = {
   onClipCreate: (values: ClipFormValues) => void;
-  onClipEdit: (values: ClipFormValues, clipUid: string) => void;
+  onClipEdit: (values: ClipFormValues) => void;
   onClipDelete: (clipId: IClip["uid"]) => void;
   onCancel: () => void;
   defaultValues?: IClip;
@@ -36,7 +36,7 @@ const ClipForm = ({
 
   const onSubmit = (values: ClipFormValues) => {
     defaultValues
-      ? onClipEdit({ ...defaultValues, ...values }, defaultValues.uid)
+      ? onClipEdit({ ...defaultValues, ...values })
       : onClipCreate(values);
   };
 

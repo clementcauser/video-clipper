@@ -88,8 +88,6 @@ const VideoPlayer = ({
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // TODO: handle timeout when switching between clips
-
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = currentTime;

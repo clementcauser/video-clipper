@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
@@ -16,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
 import { getUserFromCookie, withPrivateServerSideProps } from "@utils/auth";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
-import { collection } from "firebase/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -50,8 +51,11 @@ const Homepage = ({ user }: Props) => {
   const [selectedClipIndex, setSelectedClipIndex] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
-  const [value, loading, error] = useCollection(
-    collection(db, "clips").withConverter(clipConverter)
+  const [value, loading] = useCollection(
+    query(
+      collection(db, "clips").withConverter(clipConverter),
+      orderBy("lastUpdate", "desc")
+    )
   );
 
   const clips = value?.docs.map((doc) => ({
@@ -81,7 +85,7 @@ const Homepage = ({ user }: Props) => {
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
-          onClick={() => setModal({ show: true })}
+          onClick={() => setModal({ show: true, defaultValues: undefined })}
         >
           Créer un nouveau clip
         </Button>
@@ -104,18 +108,41 @@ const Homepage = ({ user }: Props) => {
           />
         </Stack>
         <div>
-          {selectedClip ? (
-            <VideoPlayer
-              clip={selectedClip}
-              onPrevious={onPrevious}
-              onNext={onNext}
-              canPreviousClick={!!selectedClipIndex && selectedClipIndex > 0}
-              canNextClick={!!clips && selectedClipIndex !== clips.length - 1}
-              onRangeEdit={(range) => console.log(range) /** TODO: */}
-            />
-          ) : (
+          {loading ? (
             <LoadingBox>
               <CircularProgress color="secondary" size={64} />
+            </LoadingBox>
+          ) : selectedClip ? (
+            <>
+              <VideoPlayer
+                clip={selectedClip}
+                onPrevious={onPrevious}
+                onNext={onNext}
+                canPreviousClick={!!selectedClipIndex && selectedClipIndex > 0}
+                canNextClick={!!clips && selectedClipIndex !== clips.length - 1}
+                onRangeEdit={(range) => console.log(range) /** TODO: */}
+              />
+              <Stack
+                direction="row"
+                spacing={1}
+                component="ul"
+                sx={{ padding: 0, mb: 2 }}
+              >
+                {selectedClip.tags && selectedClip.tags.length > 0 ? (
+                  selectedClip.tags?.map(({ name, uid }) => (
+                    <Chip component="li" label={name} key={uid} />
+                  ))
+                ) : (
+                  <Typography>Pas de tag associé à ce clip</Typography>
+                )}
+              </Stack>
+            </>
+          ) : (
+            <LoadingBox>
+              <Typography textAlign="center">
+                Sélectionnez un clip pour afficher le lecteur vidéo ou créez-en
+                un.
+              </Typography>
             </LoadingBox>
           )}
         </div>
