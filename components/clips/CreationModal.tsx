@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
+import { buildClipUrl } from "@utils/buildClipUrl";
 import { serverTimestamp, Timestamp } from "firebase/firestore";
 
 const ModalBox = styled(Box)(({ theme }) => ({
@@ -56,11 +57,11 @@ const CreationModal = ({ open, onClose, onSubmit, defaultValues }: Props) => {
 
             return createClip({
               title,
-              ...(tags && { tags }),
+              tags,
               authorId: user?.uid,
               startTime: 0,
               endTime: 183,
-              url: `assets/video-surf.mp4#t=${start},${end}`,
+              url: buildClipUrl(start, end),
               lastUpdate: Timestamp.now(),
             });
           }}

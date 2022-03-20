@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@components/layout";
 import ClipsList from "@components/layout/ClipsList";
 import { db } from "@firebase/client";
 import clipConverter from "@firebase/converters/clipConverter";
+import { useClipUpdate } from "@hooks/useClip";
 import { IClip } from "@interfaces";
 import AddIcon from "@mui/icons-material/Add";
 import Alert from "@mui/material/Alert";
@@ -71,6 +72,8 @@ const Homepage = ({ user }: Props) => {
 
   const selectedClip = clips?.[selectedClipIndex];
 
+  const { updateClip } = useClipUpdate(setFeedback);
+
   return (
     <AuthenticatedLayout>
       <Typography textAlign="right">
@@ -120,7 +123,7 @@ const Homepage = ({ user }: Props) => {
                 onNext={onNext}
                 canPreviousClick={!!selectedClipIndex && selectedClipIndex > 0}
                 canNextClick={!!clips && selectedClipIndex !== clips.length - 1}
-                onRangeEdit={(range) => console.log(range) /** TODO: */}
+                onRangeEdit={updateClip}
               />
               <Stack
                 direction="row"

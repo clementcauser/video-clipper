@@ -22,6 +22,8 @@ import {
   useState,
 } from "react";
 import { Typography } from "@mui/material";
+import { buildClipUrl } from "@utils/buildClipUrl";
+import { Timestamp } from "firebase/firestore";
 
 const ToolBarStack = styled(Stack)(({ theme }) => ({
   display: "flex",
@@ -65,7 +67,7 @@ type Props = {
   clip: IClip;
   onNext: () => void;
   onPrevious: () => void;
-  onRangeEdit: (range: number[]) => void;
+  onRangeEdit: (range: IClip) => void;
   canPreviousClick: boolean;
   canNextClick: boolean;
 } & ComponentPropsWithRef<"video">;
@@ -131,6 +133,18 @@ const VideoPlayer = ({
     clip.startTime === range[0] && clip.endTime === range[1]
   );
 
+  const handleRangeChange = () => {
+    const payload = {
+      ...clip,
+      startTime: range[0],
+      endTime: range[1],
+      url: buildClipUrl(range[0], range[1]),
+      lastUpdate: Timestamp.now(),
+    };
+
+    onRangeEdit(payload);
+  };
+
   return (
     <Box>
       <Box position="relative">
@@ -150,7 +164,7 @@ const VideoPlayer = ({
             <Fab
               size="medium"
               aria-label="Sauvegarder ce clip"
-              onClick={() => onRangeEdit(range)}
+              onClick={() => handleRangeChange()}
               sx={{ position: "absolute", bottom: "24px", right: "12px" }}
             >
               <SaveIcon />

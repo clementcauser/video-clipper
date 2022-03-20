@@ -37,7 +37,7 @@ const ClipForm = ({
   const onSubmit = (values: ClipFormValues) => {
     defaultValues
       ? onClipEdit({ ...defaultValues, ...values })
-      : onClipCreate(values);
+      : onClipCreate({ title: values.title, tags: values.tags ?? [] });
   };
 
   return (
