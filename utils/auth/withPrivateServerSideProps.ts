@@ -8,7 +8,6 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { getUserFromCookie } from "./getUserFromCookie";
-import isAuthenticated from "./isAuthenticated";
 
 /**
  * This function wraps a page's GetServerSideProps function. It passes the
@@ -26,7 +25,6 @@ const withPrivateServerSideProps =
     ) => Promise<GetServerSidePropsResult<T>>
   ): GetServerSideProps<T | { user: DecodedIdToken }, Q, D> =>
   async (ctx) => {
-    // const _isAuthenticated = await isAuthenticated(ctx);
     const user = await getUserFromCookie(ctx);
 
     // If not authenticated, we return a redirect object that instructs

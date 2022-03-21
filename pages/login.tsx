@@ -10,7 +10,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { getUserFromCookie } from "@utils/auth";
-import isAuthenticated from "@utils/auth/isAuthenticated";
 import generateClassName from "@utils/generateClassName";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
