@@ -22,5 +22,5 @@ const isAuthenticated = async (
 
   return false;
 };
-
+// TODO: clean up
 export default isAuthenticated;

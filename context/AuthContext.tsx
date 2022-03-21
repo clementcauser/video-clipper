@@ -15,17 +15,13 @@ export const AuthContext = createContext<AuthContextType>({});
  * This context manages authenticated user state and watch for auth changes (including cookie management)
  */
 const AuthProvider: FC = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>();
 
   useEffect(() => {
     // watch firebase auth state
     // if token is changed then it set new values (both cookie and state)
     return firebaseAuth.onIdTokenChanged(async (user) => {
-      if (!user) {
-        // empty cookie value
-        nookies.set(undefined, firebaseCookieName, "", {});
-        setCurrentUser(null);
-      } else {
+      if (user) {
         // get user token
         const token = await user.getIdToken();
         // set cookie value
@@ -36,6 +32,10 @@ const AuthProvider: FC = ({ children }) => {
         });
 
         setCurrentUser(user);
+      } else {
+        // empty cookie value
+        nookies.set(undefined, firebaseCookieName, "", {});
+        setCurrentUser(null);
       }
     });
   }, []);

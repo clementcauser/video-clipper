@@ -172,9 +172,9 @@ const Homepage = ({ user }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Partial<Props>> =
+export const getServerSideProps: GetServerSideProps =
   withPrivateServerSideProps(async (ctx) => {
-    const user = await getUserFromCookie(ctx);
+    const { user } = ctx;
 
     return { props: { user } };
   });

@@ -9,6 +9,7 @@ import MUILink from "@mui/material/Link";
 import Snackbar from "@mui/material/Snackbar";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { getUserFromCookie } from "@utils/auth";
 import isAuthenticated from "@utils/auth/isAuthenticated";
 import generateClassName from "@utils/generateClassName";
 import { GetServerSideProps } from "next";
@@ -94,10 +95,10 @@ const LoginPage = () => {
 export default LoginPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const isUserAuthenticated = await isAuthenticated(ctx);
+  const user = await getUserFromCookie(ctx);
 
   // if user is already logged in then he gets redirected to the homepage
-  if (isUserAuthenticated) {
+  if (user.email) {
     return {
       redirect: {
         destination: Route.HOME,

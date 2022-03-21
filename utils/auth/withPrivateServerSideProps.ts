@@ -1,5 +1,13 @@
 import { Route } from "@constants";
-import { GetServerSideProps } from "next";
+import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  PreviewData,
+} from "next";
+import { ParsedUrlQuery } from "querystring";
+import { getUserFromCookie } from "./getUserFromCookie";
 import isAuthenticated from "./isAuthenticated";
 
 /**
@@ -7,15 +15,23 @@ import isAuthenticated from "./isAuthenticated";
  * `redirect` object if the user needs to authenticate, and calls the wrapped
  * function otherwise.
  */
-const withPrivateServerSideProps = (
-  getServerSidePropsFunc?: GetServerSideProps
-): GetServerSideProps => {
-  const withPrivateServerSideProps: GetServerSideProps = async (ctx) => {
-    const _isAuthenticated = await isAuthenticated(ctx);
+const withPrivateServerSideProps =
+  <
+    T extends { [key: string]: any } = { [key: string]: any },
+    Q extends ParsedUrlQuery = ParsedUrlQuery,
+    D extends PreviewData = PreviewData
+  >(
+    getServerSidePropsFunc?: (
+      ctx: GetServerSidePropsContext<Q, D> & { user: DecodedIdToken }
+    ) => Promise<GetServerSidePropsResult<T>>
+  ): GetServerSideProps<T | { user: DecodedIdToken }, Q, D> =>
+  async (ctx) => {
+    // const _isAuthenticated = await isAuthenticated(ctx);
+    const user = await getUserFromCookie(ctx);
 
     // If not authenticated, we return a redirect object that instructs
     // Next.js to redirect to our login page.
-    if (!_isAuthenticated) {
+    if (!user.email) {
       return {
         redirect: {
           destination: Route.LOGIN,
@@ -25,12 +41,12 @@ const withPrivateServerSideProps = (
     }
 
     if (getServerSidePropsFunc) {
-      return await getServerSidePropsFunc(ctx);
+      return await getServerSidePropsFunc({
+        ...ctx,
+        user,
+      });
     }
-    return { props: {} };
+    return { props: { user } };
   };
-
-  return withPrivateServerSideProps;
-};
 
 export default withPrivateServerSideProps;
