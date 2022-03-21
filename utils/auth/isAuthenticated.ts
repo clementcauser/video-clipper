@@ -14,7 +14,7 @@ const isAuthenticated = async (
 
       // An anonymous user may have a UID, but authenticated users must have an
       // account (an email address).
-      return !!user.email;
+      return !!user?.email;
     } catch (err) {
       return false;
     }

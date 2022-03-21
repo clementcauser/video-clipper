@@ -31,7 +31,7 @@ const withPrivateServerSideProps =
 
     // If not authenticated, we return a redirect object that instructs
     // Next.js to redirect to our login page.
-    if (!user.email) {
+    if (!user?.email) {
       return {
         redirect: {
           destination: Route.LOGIN,

@@ -98,7 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = await getUserFromCookie(ctx);
 
   // if user is already logged in then he gets redirected to the homepage
-  if (user.email) {
+  if (user?.email) {
     return {
       redirect: {
         destination: Route.HOME,
