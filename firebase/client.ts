@@ -1,15 +1,15 @@
-import firebase, { FirebaseOptions, getApp, initializeApp } from "firebase/app";
+import * as firebase from "firebase/app";
 import "firebase/auth";
 import { getAuth } from "firebase/auth";
 import "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { firebaseClientConfig } from "./config";
 
-const createFirebaseApp = (config: FirebaseOptions) => {
+const createFirebaseApp = (config: firebase.FirebaseOptions) => {
   try {
-    return getApp();
+    return firebase.getApp();
   } catch {
-    return initializeApp(config);
+    return firebase.initializeApp(config);
   }
 };
 
